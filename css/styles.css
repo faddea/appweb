@@ -1,3 +1,53 @@
+/* Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+  .panel {
+    padding: 15px;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .top-bar h1 {
+    font-size: 1.4rem;
+    text-align: left;
+  }
+
+  .btn-back {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .rack {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+  }
+
+  .netbook {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+  }
+
+  .netbook img {
+    width: 50%;
+  }
+
+  .modal-contenido {
+    width: 90%;
+    padding: 15px;
+  }
+
+  button {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+
 body {
       font-family: 'Montserrat', sans-serif;
       margin: 0;

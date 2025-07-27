@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Docente | NetGestor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tailwind opcional (lo dejamos cargado si lo usás en otras partes) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background-color: #f3f4f6; /* gris claro */
+      font-family: 'Segoe UI', sans-serif;
+      color: #1f2937; /* text-gray-800 */
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      background-color: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="bg-white shadow p-6 mb-8">
+    <h1 class="text-3xl font-bold text-center">Bienvenido Docente</h1>
+    <p class="text-center text-gray-500">Panel de gestión de clases y alumnos</p>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
+    <a href="#" class="card">Mis Clases</a>
+    <a href="dashboard.html" class="card">Lista de netbooks</a>
+    <a href="docente.html" class="card">Realizar pedido</a>
+  </main>
+
+</body>
+</html>

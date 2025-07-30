@@ -1,28 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Panel del Administrador</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Tu CSS vanilla con animaciones, modal, etc. -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        fontFamily: {
+          sans: ['Montserrat', 'sans-serif'],
+        },
+      },
+    };
+  </script>
 </head>
-<body class="modo-oscuro">
-  <div class="panel">
-    <div class="top-bar">
-    <h1>🔧 Panel del Administrador</h1>
-          <button class="btn-back" onclick="history.back()">⮐ Volver</button>
-    </div>
-    <div class="rack">
 
-   <!-- Notificación interna -->
-    <div id="notificacion" class="notification"></div>
+<body class="bg-slate-300 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300 font-sans">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    
+    <!-- Top Bar -->
+    <header class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+      <h1 class="text-2xl font-semibold">Panel del Administrador</h1>
+      <div class="flex gap-2">
+          <button onclick="toggleTheme()" class="bg-slate-200 hover:bg-gray-400 text-gray-800 dark:bg-gray-700 dark:text-gray-50 dark:hover:bg-slate-900 px-4 py-2 rounded transition">
+        Cambiar tema
+        </button>
+        <button onclick="history.back()" class="bg-slate-700 hover:bg-gray-600 text-white dark:bg-black px-4 py-2 rounded transition">
+          ⮐ Volver
+        </button>
+      </div>
+    </header>
 
-      <!-- Modal -->
+    <!-- Notificación interna -->
+    <div id="notificacion" class="hidden bg-green-100 text-green-900 dark:bg-green-800 dark:text-green-100 px-4 py-3 rounded border-l-4 border-green-500 text-sm mb-6"></div>
+
+    <!-- Rack -->
+    <div id="rack-container" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
+  </div>
+
+<!-- MODAL -->
 <div id="modal" class="modal oculto">
   <div class="modal-contenido">
     <h2>Netbook <span id="modal-id"></span></h2>
     <label for="estado">Estado:</label>
     <select id="estado">
+      <option value="ocupada">Ocupada</option>
       <option value="disponible">Disponible</option>
       <option value="pedida">Pedida</option>
       <option value="daniada">Dañada</option>
@@ -34,25 +66,85 @@
   </div>
 </div>
 
-      <!-- Las 30 netbooks -->
-      <script>
-        for (let i = 1; i <= 30; i++) {
-          document.write(`
-            <div class="netbook" onclick="seleccionarNetbook(this)" data-id="${i}">
-              <img src="imagenes/netbook.svg" alt="Netbook ${i}">
-              <span>#${i}</span>
-            </div>
-          `);
-        }
-      </script>
+
+
+<script>
+  // Render netbooks
+  const rack = document.getElementById('rack-container');
+  for (let i = 1; i <= 30; i++) {
+    const div = document.createElement('div');
+    div.className = 'netbook bg-gray-200 dark:bg-gray-800 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:ring-2 hover:ring-blue-400 transition';
+    div.innerHTML = `
+      <img src="imagenes/netbook.svg" alt="Netbook ${i}" class="w-12 h-auto mb-2">
+      <span class="text-sm font-medium text-gray-700 dark:text-gray-300">#${i}</span>`;
+    div.dataset.id = i;
+    div.onclick = () => seleccionarNetbook(div);
+    rack.appendChild(div);
+  }
+
+let netbookSeleccionada = null;
+
+function seleccionarNetbook(elemento) {
+  netbookSeleccionada = elemento;
+  const id = elemento.getAttribute("data-id");
+  document.getElementById("modal-id").textContent = id;
+  document.getElementById("modal").classList.remove("oculto");
+}
+
+function cerrarModal() {
+  document.getElementById("modal").classList.add("oculto");
+}
+
+function guardarCambios() {
+  const estado = document.getElementById("estado").value;
+  const observacion = document.getElementById("observacion").value;
+
+  if (netbookSeleccionada) {
+    netbookSeleccionada.classList.remove("ocupada", "disponible", "pedida", "daniada");
+    netbookSeleccionada.classList.add(estado);
+
+    // Acá podrías guardar el dato a un servidor si querés
+    console.log(`Netbook #${netbookSeleccionada.dataset.id} -> Estado: ${estado}, Obs: ${observacion}`);
+  }
+
+  cerrarModal();
+}
+
+ {
+  document.write(`
+    <div class="netbook" onclick="seleccionarNetbook(this)" data-id="${i}">
+      <img src="imagenes/netbook.svg" alt="Netbook ${i}">
+      <span>#${i}</span>
     </div>
-  </div>
+  `);
+}
 
-          <a class="button" href="index.html">Enviar Pedido</a>
 
-    <!-- Notificación interna -->
-    <div id="notificacion" class="notification"></div>
 
-  <script src="js/app.js"></script>
+
+  // Notificación
+  function mostrarNotificacion(mensaje) {
+    const notif = document.getElementById('notificacion');
+    notif.textContent = mensaje;
+    notif.classList.remove('hidden');
+    setTimeout(() => notif.classList.add('hidden'), 3000);
+  }
+
+  // Tema claro / oscuro
+  function toggleTheme() {
+    document.documentElement.classList.toggle('dark');
+  }
+
+  document.querySelectorAll('.netbook').forEach(netbook => {
+  netbook.addEventListener('click', () => {
+    document.getElementById('modalContainer').classList.remove('hidden');
+  });
+});
+
+</script>
+
+    
+<script src="js/app.js"></script>
+
 </body>
 </html>

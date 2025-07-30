@@ -1,145 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Panel de Regencia</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Montserrat', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #121212;
-      color: #fff;
-    }
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    .panel {
-      padding: 30px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
+  <!-- 1️⃣  Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+  <!-- 2️⃣  CSS “vanilla” con la animación  -->
 
-    .top-bar h1 {
-      font-size: 1.75rem;
-    }
 
-    .btn-back {
-      background-color: #444;
-      color: #fff;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .btn-back:hover {
-      background-color: #666;
-    }
-
-    .notification {
-      background-color: #1e1e1e;
-      border-left: 4px solid #4ade80;
-      padding: 15px 20px;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      display: none;
-      font-size: 0.95rem;
-    }
-
-    .rack {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 15px;
-    }
-
-    .netbook {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      background-color: #1f1f1f;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      cursor: pointer;
-      color: #ccc;
-    }
-
-    .netbook img {
-      width: 60%;
-      height: auto;
-      margin-bottom: 5px;
-    }
-
-    .netbook::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      border: 2px solid transparent;
-      animation: recorrerBorde 2s linear infinite;
-      pointer-events: none;
-    }
-
-    @keyframes recorrerBorde {
-      0%   { border-top: 2px solid #00f; border-right: 2px solid transparent; }
-      25%  { border-right: 2px solid #00f; border-bottom: 2px solid transparent; }
-      50%  { border-bottom: 2px solid #00f; border-left: 2px solid transparent; }
-      75%  { border-left: 2px solid #00f; }
-      100% { border-top: 2px solid transparent; border-right: 2px solid transparent; border-bottom: 2px solid transparent; border-left: 2px solid transparent; }
-    }
-  </style>
+  <!-- 3️⃣  Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        fontFamily:{ sans:['Montserrat','sans‑serif'] },
+      },
+    };
+  </script>
 </head>
-<body>
-  <div class="panel">
-    <div class="top-bar">
-      <h1>Dashboard</h1>
-      <button class="btn-back" onclick="history.back()">⮐ Volver</button>
+
+<body class="bg-slate-300 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300 font-sans">
+  <header class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <h1 class="text-2xl font-semibold">Dashboard</h1>
+
+    <div class="flex gap-2">
+      <button
+        class="bg-slate-200 hover:bg-gray-400 text-gray-800 dark:bg-gray-700 dark:text-gray-50 dark:hover:bg-slate-900 px-4 py-2 rounded transition"
+        onclick="toggleTheme()"
+      >
+        Cambiar tema
+      </button>
+      <button
+        class="bg-slate-700 hover:bg-gray-600 text-white dark:bg-black px-4 py-2 rounded transition"
+        onclick="history.back()"
+      >
+        ⮐ Volver
+      </button>
     </div>
+  </header>
 
-    <!-- Notificación interna -->
-    <div id="notificacion" class="notification"></div>
-
-    <!-- Rack de netbooks -->
-    <div class="rack" id="rack-container"></div>
+  <!-- Notificación -->
+  <div id="notificacion"
+       class="hidden max-w-5xl mx-auto bg-green-100 text-green-900 dark:bg-green-800 dark:text-green-100 px-4 py-3 mb-6 rounded border-l-4 border-green-500 text-sm">
   </div>
 
-  <script>
-    // Crear las netbooks dinámicamente
-    const rack = document.getElementById('rack-container');
-    for (let i = 1; i <= 30; i++) {
-      const div = document.createElement('div');
-      div.className = 'netbook';
-      div.innerHTML = `
-        <img src="imagenes/netbook.svg" alt="Netbook ${i}">
-        <span>#${i}</span>
-      `;
-      div.addEventListener('click', () => mostrarNotificacion(`Seleccionaste la Netbook #${i}`));
-      rack.appendChild(div);
-    }
+  <!-- Rack -->
+  <main id="rack-container"
+        class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+  </main>
 
-    // Función para mostrar notificaciones internas
-    function mostrarNotificacion(mensaje) {
-      const notif = document.getElementById('notificacion');
-      notif.textContent = mensaje;
-      notif.style.display = 'block';
+    <script>
+      const rack = document.getElementById('rack-container');
 
-      setTimeout(() => {
-        notif.style.display = 'none';
-      }, 3000);
-    }
-  </script>
-</body>
+      for (let i = 1; i <= 30; i++) {
+        const div = document.createElement('div');
+        div.className =
+          'netbook bg-slate-200 dark:bg-gray-900 text-center rounded-xl p-4 flex flex-col items-center justify-center shadow cursor-pointer hover:ring-2 hover:ring-blue-400 transition';
+        div.innerHTML = `
+          <img src="imagenes/netbook.svg" alt="Netbook ${i}" class="w-12 h-auto mb-2" />
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">#${i}</span>
+        `;
+        div.addEventListener('click', () =>
+          mostrarNotificacion(`Seleccionaste la Netbook #${i}`)
+        );
+        rack.appendChild(div);
+      }
+
+      function mostrarNotificacion(mensaje) {
+        const notif = document.getElementById('notificacion');
+        notif.textContent = mensaje;
+        notif.classList.remove('hidden');
+        setTimeout(() => {
+          notif.classList.add('hidden');
+        }, 3000);
+      }
+
+      function toggleTheme() {
+        document.documentElement.classList.toggle('dark');
+      }
+    </script>
+
+    
+
+
+  <script src="js/app.js"></script>
+
+  </body>
 </html>

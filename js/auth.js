@@ -1,42 +1,26 @@
 // auth.js
-import { auth, db } from './firebase.js';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { auth } from './firebaseconfig.js';
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-import {
-  doc,
-  setDoc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+const form = document.getElementById("registroForm");
 
-// REGISTRO
-const registerForm = document.getElementById("signup-form");
-if (registerForm) {
-  registerForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = registerForm["email"].value;
-    const password = registerForm["contrasena"].value;
-    const rol = registerForm["rol"].value;
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = form.email.value;
+  const password = form.contrasena.value;
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const uid = userCredential.user.uid;
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Usuario registrado
+      const user = userCredential.user;
+      alert("Registro exitoso!");
+      window.location.href = "admin.html"; // o la página correspondiente
+    })
+    .catch((error) => {
+      alert("Error en el registro: " + error.message);
+    });
+});
 
-      // Guardamos el rol en Firestore
-      await setDoc(doc(db, "usuarios", uid), {
-        email,
-        rol
-      });
-
-      alert("Usuario registrado");
-      redirigirPorRol(rol);
-    } catch (error) {
-      alert("Error al registrar: " + error.message);
-    }
-  });
-}
 
 // LOGIN
 const loginForm = document.getElementById("login-form");

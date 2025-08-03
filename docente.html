@@ -79,15 +79,7 @@
   </div>
 
   <!-- JS -->
-<script type="module">
-  import { auth, db } from './firebase.js';
-  import {
-    collection,
-    addDoc,
-    serverTimestamp
-  } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-
-
+  <script>
     // Render netbooks
     const rack = document.getElementById("rack");
     for (let i = 1; i <= 30; i++) {
@@ -111,41 +103,19 @@
       document.getElementById("modalPedido").classList.add("oculto");
     }
 
-async function confirmarPedido() {
-  const fecha = document.getElementById("fecha").value;
-  const hora = document.getElementById("hora").value;
-  const persona = document.getElementById("persona").value;
+    function confirmarPedido() {
+      const fecha = document.getElementById("fecha").value;
+      const hora = document.getElementById("hora").value;
+      const persona = document.getElementById("persona").value;
 
-  const seleccionadas = Array.from(document.querySelectorAll(".netbook.seleccionada"))
-    .map(el => parseInt(el.dataset.id));
+      if (!fecha || !hora || !persona) {
+        mostrarNotificacion("Por favor completá todos los campos.");
+        return;
+      }
 
-  if (!fecha || !hora || !persona || seleccionadas.length === 0) {
-    mostrarNotificacion("Por favor completá todos los campos y seleccioná al menos una netbook.");
-    return;
-  }
-
-  const user = auth.currentUser;
-
-  try {
-    await addDoc(collection(db, "pedidos_netbooks"), {
-      uidDocente: user.uid,
-      emailDocente: user.email,
-      fecha,
-      hora,
-      retiradoPor: persona,
-      netbooks: seleccionadas,
-      estado: "pendiente",
-      timestamp: serverTimestamp()
-    });
-
-    mostrarNotificacion("✅ Pedido enviado con éxito.");
-    cerrarModalPedido();
-  } catch (error) {
-    console.error("Error al guardar pedido:", error);
-    alert("Hubo un error al enviar el pedido.");
-  }
-}
-
+      mostrarNotificacion("✅ Pedido confirmado.");
+      cerrarModalPedido();
+    }
 
     // Estado de selección
     function seleccionarNetbookDocente(elemento) {
@@ -166,11 +136,7 @@ async function confirmarPedido() {
     }
   </script>
 
-  <script type="module" src="js/netbooks.js"></script>
-
-  <script type="module" src="pedidos.js"></script>
-
-  <script type= "module" src="js/app.js"></script>
+  <script src="js/app.js"></script>
     
 </body>
 </html>

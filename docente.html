@@ -79,7 +79,15 @@
   </div>
 
   <!-- JS -->
-  <script>
+<script type="module">
+  import { auth, db } from './firebase.js';
+  import {
+    collection,
+    addDoc,
+    serverTimestamp
+  } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+
     // Render netbooks
     const rack = document.getElementById("rack");
     for (let i = 1; i <= 30; i++) {
@@ -103,19 +111,41 @@
       document.getElementById("modalPedido").classList.add("oculto");
     }
 
-    function confirmarPedido() {
-      const fecha = document.getElementById("fecha").value;
-      const hora = document.getElementById("hora").value;
-      const persona = document.getElementById("persona").value;
+async function confirmarPedido() {
+  const fecha = document.getElementById("fecha").value;
+  const hora = document.getElementById("hora").value;
+  const persona = document.getElementById("persona").value;
 
-      if (!fecha || !hora || !persona) {
-        mostrarNotificacion("Por favor completá todos los campos.");
-        return;
-      }
+  const seleccionadas = Array.from(document.querySelectorAll(".netbook.seleccionada"))
+    .map(el => parseInt(el.dataset.id));
 
-      mostrarNotificacion("✅ Pedido confirmado.");
-      cerrarModalPedido();
-    }
+  if (!fecha || !hora || !persona || seleccionadas.length === 0) {
+    mostrarNotificacion("Por favor completá todos los campos y seleccioná al menos una netbook.");
+    return;
+  }
+
+  const user = auth.currentUser;
+
+  try {
+    await addDoc(collection(db, "pedidos_netbooks"), {
+      uidDocente: user.uid,
+      emailDocente: user.email,
+      fecha,
+      hora,
+      retiradoPor: persona,
+      netbooks: seleccionadas,
+      estado: "pendiente",
+      timestamp: serverTimestamp()
+    });
+
+    mostrarNotificacion("✅ Pedido enviado con éxito.");
+    cerrarModalPedido();
+  } catch (error) {
+    console.error("Error al guardar pedido:", error);
+    alert("Hubo un error al enviar el pedido.");
+  }
+}
+
 
     // Estado de selección
     function seleccionarNetbookDocente(elemento) {
@@ -136,7 +166,11 @@
     }
   </script>
 
-  <script src="js/app.js"></script>
+  <script type="module" src="js/netbooks.js"></script>
+
+  <script type="module" src="pedidos.js"></script>
+
+  <script type= "module" src="js/app.js"></script>
     
 </body>
 </html>

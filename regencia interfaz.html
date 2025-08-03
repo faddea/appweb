@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Administrador - NetGestor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: #f4f4f5;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: #2c3e50;
+    }
+
+    .logout-btn {
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: #c0392b;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .card a {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: #34495e;
+    }
+
+    .card p {
+      color: #666;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #fafafa;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+
+    .card-link {
+    display: block;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    text-align: center;
+    text-decoration: none;
+    color: #374151; /* text-gray-700 */
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .card-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background-color: #f9fafb;
+  }
+</style>
+
+</head>
+<body>
+
+
+
+
+
+<header class="bg-white shadow p-6 mb-8 relative">
+  <h1 class="text-3xl font-bold text-center mb-4">Bienvenido, Regente</h1>
+  <div class="flex items-center gap-4 justify-center md:justify-end">
+    <button id="hamburgerBtn" class="md:hidden text-3xl text-gray-800" aria-label="Abrir menú">
+      ☰
+    </button>
+    <nav
+      id="menu"
+      class="hidden md:flex flex-col md:flex-row gap-3 bg-black bg-opacity-90 border border-gray-700 p-4 rounded-md absolute right-4 top-16 md:static md:bg-transparent md:border-0 md:p-0 md:rounded-none z-50 shadow-lg md:shadow-none min-w-[160px]"
+    >
+      <button class="text-white bg-emerald-800 hover:bg-emerald-700 px-3 py-2 rounded transition text-left w-full md:w-auto" onclick="alert('Opción 1')">
+        Horarios
+      </button>
+      <button class="text-white bg-black hover:bg-gray-700 px-3 py-2 rounded transition text-left w-full md:w-auto" onclick="alert('Opción 2')">
+        Docentes
+      </button>
+      <button id="btnCerrarSesion" class="text-white bg-black hover:bg-gray-700 px-3 py-2 rounded transition text-left w-full md:w-auto">
+        Cerrar sesión
+      </button>
+      <button id="logoutBtn" class="text-white bg-black hover:bg-red-600 px-3 py-2 rounded transition text-left w-full md:w-auto">
+        Eliminar cuenta
+      </button>
+    </nav>
+    <button
+      class="bg-slate-700 hover:bg-gray-600 text-white dark:bg-black px-4 py-2 rounded transition"
+      onclick="history.back()"
+    >
+      ⮐ Volver
+    </button>
+  </div>
+</header>
+
+
+  <main class="p-6">
+  <div class="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
+    <a href="usuarios.html" class="card-link">
+      <h3 class="text-lg font-bold text-gray-700 mb-2">Gestión de Usuarios</h3>
+      <p class="text-sm text-gray-600">Agregar, editar o eliminar cuentas de usuarios.</p>
+    </a>
+
+    <a href="notificaciones.html" class="card-link bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+      <h3 class="text-lg font-bold text-gray-700 mb-2">Notificaciones</h3>
+      <p class="text-sm text-gray-600">Enviar avisos a docentes y regencia.</p>
+    </a>
+
+    <a href="reportes.html" class="card-link bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+      <h3 class="text-lg font-bold text-gray-700 mb-2">Reportes</h3>
+      <p class="text-sm text-gray-600">Ver estadísticas de uso y actividad.</p>
+    </a>
+
+    <a href="admin dashboard.html" class="card-link bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+      <h3 class="text-lg font-bold text-gray-700 mb-2">Gestión de Netbooks</h3>
+      <p class="text-sm text-gray-600">Acceder al panel de control de netbooks.</p>
+    </a>
+
+
+    
+  </div>
+</main>
+
+
+
+  <footer>
+    © 2025 NetGestor - Todos los derechos reservados
+  </footer>
+
+
+
+
+  <script src="js/app.js"></script>
+
+</body>
+</html>
